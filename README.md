@@ -19,8 +19,11 @@ sysinfo --help
 
 ## Installation
 
+
 git clone https://github.com/kush511/sysinfo.git
-cd sysinfo
+
+
+
 chmod +x sysinfo
 sudo cp sysinfo /usr/local/bin/
 
