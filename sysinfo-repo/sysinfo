@@ -1,0 +1,132 @@
+#!/bin/bash
+
+echo "System info"
+echo "-----------"
+
+show_help() {
+  echo "Usage: sysinfo [OPTIONS]"
+  echo
+  echo "Options:"
+  echo "  --os           Show OS name"
+  echo "  --kernel       Show kernel version"
+  echo "  --host         Show hostname"
+  echo "  --cores        Show CPU cores"
+  echo "  --uptime       Show system uptime"
+  echo "  --memory       Show memory usage"
+  echo "  --disk         Show disk usage"
+  echo "  --ip           Show IP address"
+  echo "  --user         Show current user"
+  echo "  --all          Show all information"
+  echo "  --help         Show this help message"
+}
+
+function show_os()
+{
+os_name=$(sed -n 's/^PRETTY_NAME=//p' /etc/os-release | tr -d '"')
+echo "OS Name:          ${os_name}"
+}
+
+function show_kernel()
+{
+kernel=$(uname -r)
+echo "Kernel version:   ${kernel}"
+}
+
+function show_host()
+{
+host=$(hostname)
+echo "Hostname:         ${host}"
+}
+
+function show_cores()
+{
+core=$(nproc --all)
+echo "Cores:            ${core}"
+}
+
+function show_uptime()
+{
+up=$(uptime -p)
+echo "Uptime:           ${up}"
+}
+
+function show_mem()
+{
+mem=$(free -h | awk '/Mem:/ {print $3 "/" $2}')
+echo "Memory:           ${mem}"
+}
+
+function show_disk()
+{
+disk=$(df -h | awk 'NR==2 {print $5}')
+echo "Disk usage:       ${disk}"
+}
+function show_ip()
+{
+ip=$(hostname -I)
+echo "IP Address:       ${ip}"
+}
+show_current_user() {
+curr=$(whoami)
+echo "Current user:     ${curr}"
+}
+show_all() {
+  show_os
+  show_kernel
+  show_host
+  show_cores
+  show_uptime
+  show_mem
+  show_disk
+  show_ip
+  show_current_user
+}
+
+if [ "$#" -eq 0 ]; then
+  show_all
+  exit 0
+fi
+
+for arg in "$@"; do
+  case "$arg" in
+    --os)
+      show_os
+      ;;
+    --kernel)
+      show_kernel
+      ;;
+    --host)
+      show_host
+      ;;
+    --cores)
+      show_cores
+      ;;
+    --uptime)
+      show_uptime
+      ;;
+    --memory)
+      show_mem
+      ;;
+    --disk)
+      show_disk
+      ;;
+    --ip)
+      show_ip
+      ;;
+    --user)
+      show_current_user
+      ;;
+    --all)
+      show_all
+      ;;
+    --help)
+      show_help
+      ;;
+    *)
+      echo "Unknown option: $arg"
+      echo "Try: sysinfo --help"
+      exit 1
+      ;;
+  esac
+done
+
