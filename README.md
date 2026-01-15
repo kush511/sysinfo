@@ -31,3 +31,6 @@ sudo cp sysinfo /usr/local/bin/
 - Linux
 - Bash
 - coreutils
+
+
+checking
